@@ -1,7 +1,39 @@
 ﻿@page "/"
 @using Radzen;
 @using Radzen.Blazor;
+@layout MainLayout;
+@inherits Wordle.Pages.IndexComponent.IndexComponent;
 
 <PageTitle>Wordle</PageTitle>
 
-<RadzenText Text="Hi" />
+<RadzenContent Style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
+    
+    <div class="guesses" style="width: 50%; display: flex; justify-content: center;">
+        @foreach (var guess in Guesses)
+        {
+            <div class="guess" style="display: flex;">
+                @foreach (var letter in guess.Value)
+                {
+                    if (guess.Contained.Contains(letter.ToString()))
+                    {
+                        <RadzenText Text=@(letter.ToString()) Style="background-color: orange; border-radius: 5px; margin: 0 16px; width: 75px; height: 75px; border: 2px solid white; color: white; text-transform: uppercase; font-weight: 700; font-size: 40px; line-height: 0; display: flex; align-items: center; justify-content: center;" />             
+                    } else if (guess.ContainedAndPlacement.Contains(letter.ToString()))
+                    {
+                        <RadzenText Text=@(letter.ToString()) Style="background-color: green; border-radius: 5px; margin: 0 16px; width: 75px; height: 75px; border: 2px solid white; color: white; text-transform: uppercase; font-weight: 700; font-size: 40px; line-height: 0; display: flex; align-items: center; justify-content: center;" />
+                    }
+                    else
+                    {
+                        <RadzenText Text=@(letter.ToString()) Style="margin: 0 16px; width: 75px; border-radius: 5px; height: 75px; border: 2px solid white; color: white; text-transform: uppercase; font-weight: 700; font-size: 40px; line-height: 0; display: flex; align-items: center; justify-content: center;" />
+                    }
+                } 
+            </div>
+        }
+    </div>
+    
+    <div class="data-entry">
+        <RadzenText Text=@(Answer)/>
+
+        <RadzenTextBox @bind-Value=@(Guess.Value)/>
+        <RadzenButton ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Text="Guess" Click="GuessRequest"/>
+    </div>
+</RadzenContent>
